@@ -1,5 +1,6 @@
 package com.example.datastorage.model;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -24,7 +25,7 @@ public interface MyDAO {
     public void deleteUser(Student student);
 
     @Query("Select * from users")
-    public List<Student> getData();
+    public LiveData<List<Student>> getData();
 
     @Update
     public void UpdateUser(Student student);

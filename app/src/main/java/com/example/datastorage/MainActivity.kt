@@ -2,10 +2,14 @@ package com.example.datastorage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -16,15 +20,21 @@ import com.example.datastorage.model.MyDataBase
 import com.example.datastorage.model.Student
 import com.example.myloginapp.Dialog.ExampleDialog
 import com.example.myloginapp.interfacePackage.OnClickListner
+import java.time.Duration.of
+import java.time.Month.of
+import java.util.EnumSet.of
+import java.util.Optional.of
+import java.util.OptionalInt.of
 
 class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleDialogListener{
 
     lateinit var txt : EditText
     lateinit var mydataBase : MyDataBase
-    lateinit var studantTable : StudentViewModel
+
     lateinit var adapter: MyAdapter
     lateinit var recyclerView : RecyclerView
     lateinit var nodata : TextView
+    lateinit var mViewmodel : StudentViewModel
     var arr :ArrayList<Student> = ArrayList<Student>();
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +45,11 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
     fun init(){
         adapter = MyAdapter(this,arr)
         txt = findViewById(R.id.txt)
-        studantTable = StudentViewModel(this)
+
         recyclerView =  findViewById(R.id.recycle)
         nodata = findViewById(R.id.nodata)
+
+        mViewmodel = ViewModelProviders.of(this).get(StudentViewModel::class.java)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = MyAdapter(this,arr)
@@ -48,10 +60,20 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
 
     private fun FetchAlldataFromRoom() {
         var data   = ArrayList<Student>()
-        data = studantTable.getAllData() as ArrayList<Student>
+        mViewmodel!!.allData.observe(this,  Observer<List<Student>>{
+            data = it as ArrayList<Student>
+            Log.i("MySize"," "+arr.size)
+        })
+
+
         for(i in data){
+            Log.i("MySize"," Loop "+data.size)
             arr.add(i)
         }
+
+        checkForData()
+
+        //adapter.notifyDataSetChanged()
     }
 
     fun onClickHandler(view : View){
@@ -79,7 +101,7 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
 
     private fun onSearch() {
         var data = txt.text.toString()
-        if(studantTable.searchStudent(data)==true){
+        if(mViewmodel.searchStudent(data)==true){
             Toast.makeText(this,"Student Found",Toast.LENGTH_SHORT).show()
         }else{
             Toast.makeText(this,"Student Not Found",Toast.LENGTH_SHORT).show()
@@ -90,7 +112,7 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
         var data = txt.text.toString()
         var stu : Student = Student()
         stu.useremail = data
-        studantTable.insertStudentData(stu)
+        mViewmodel.insertStudentData(stu)
         arr.add(stu)
         adapter.notifyDataSetChanged()
         checkForData()
@@ -112,7 +134,7 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
     }
 
     override fun onDeleteClick(i: Int) {
-        studantTable.deleteStudent(arr.get(i))
+        mViewmodel.deleteStudent(arr.get(i))
         arr.removeAt(i)
         adapter.notifyDataSetChanged()
         checkForData()
@@ -124,6 +146,7 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
     }
 
     fun checkForData(){
+        Log.i("MySize2"," " +arr.size)
         if(arr.size==0){
             recyclerView.visibility =View.GONE
             nodata.visibility = View.VISIBLE
@@ -136,7 +159,7 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
     override fun applyTexts(username: String?,position : Int){
         var data = arr.get(position)
         data.Uname = username
-        studantTable.updateData(data)
+        mViewmodel.updateData(data)
         adapter.notifyDataSetChanged()
     }
 }

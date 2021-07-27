@@ -1,40 +1,46 @@
 package com.example.datastorage.ViewModel;
 
+import android.app.Application;
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 
+import com.example.datastorage.Repository.StudentRepository;
 import com.example.datastorage.model.MyDataBase;
 import com.example.datastorage.model.Student;
 
 import java.util.List;
 
-public class StudentViewModel {
-    MyDataBase myDataBase;
-    public StudentViewModel(Context context){
-        myDataBase= Room.databaseBuilder(context,MyDataBase.class,"userdb").allowMainThreadQueries().build();
+public class StudentViewModel extends AndroidViewModel {
+    StudentRepository repository;
+
+    public StudentViewModel(@NonNull Application application) {
+        super(application);
+//        myDataBase= Room.databaseBuilder(context,MyDataBase.class,"userdb").allowMainThreadQueries().build();
+        repository = new StudentRepository(application);
     }
 
+
     public void insertStudentData(Student student){
-        myDataBase.myDAO().insert(student);
+        repository.insertStudentData(student);
     }
 
     public void deleteStudent(Student student){
-        myDataBase.myDAO().deleteUser(student);
+        repository.deleteStudent(student);
     }
 
     public boolean searchStudent(String str){
-        if(myDataBase.myDAO().isDataExist(str)==0){
-            return false;
-        }
-        return true;
+       return repository.searchStudent(str);
     }
 
-    public List<Student> getAllData(){
-        return myDataBase.myDAO().getData();
+    public LiveData<List<Student>> getAllData(){
+        return repository.getAllData();
     }
 
     public void updateData(Student student){
-        myDataBase.myDAO().UpdateUser(student);
+        repository.updateData(student);
     }
 }
