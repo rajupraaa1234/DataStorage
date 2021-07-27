@@ -2,6 +2,8 @@ package com.example.datastorage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -55,23 +57,23 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
         adapter = MyAdapter(this,arr)
         recyclerView.adapter = adapter
         FetchAlldataFromRoom()
-        checkForData()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            checkForData()
+        }, 3000)
+
     }
 
     private fun FetchAlldataFromRoom() {
+
         var data   = ArrayList<Student>()
         mViewmodel!!.allData.observe(this,  Observer<List<Student>>{
             data = it as ArrayList<Student>
-            Log.i("MySize"," "+arr.size)
+            arr = data
+            Log.i("MySize"," "+data.size)
         })
 
-
-        for(i in data){
-            Log.i("MySize"," Loop "+data.size)
-            arr.add(i)
-        }
-
-        checkForData()
+        //checkForData()
 
         //adapter.notifyDataSetChanged()
     }
