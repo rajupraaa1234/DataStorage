@@ -1,5 +1,6 @@
 package com.example.datastorage
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import androidx.room.Room.databaseBuilder
 import com.example.datastorage.Adapter.MyAdapter
+import com.example.datastorage.ContentProvider.ContentProviderActivity
 import com.example.datastorage.ViewModel.StudentViewModel
 import com.example.datastorage.model.MyDataBase
 import com.example.datastorage.model.Student
@@ -60,7 +62,7 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
                 onSaveData()
             }
             R.id.search->{onSearch()}
-            R.id.delete->{onDelete()}
+            R.id.cp->{onDelete()}
         }
     }
 
@@ -74,7 +76,9 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
 //        }else{
 //            Toast.makeText(this,"Student Not Found",Toast.LENGTH_SHORT).show()
 //        }
-
+        var cpIntent : Intent
+        cpIntent = Intent(this,ContentProviderActivity::class.java)
+        startActivity(cpIntent)
     }
 
     private fun onSearch() {

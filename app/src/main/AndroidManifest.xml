@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DataStorage">
+        <activity android:name=".ContentProvider.ContentProviderActivity"></activity>
+        <activity android:name=".ContentProvider.MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,6 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="com.example.datastorage"
+            android:name=".ContentProvider.MyContentProvider"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            ></provider>
     </application>
 
 </manifest>
