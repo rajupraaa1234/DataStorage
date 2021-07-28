@@ -10,7 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DataStorage">
         <activity android:name=".ContentProvider.ContentProviderActivity"></activity>
-        <activity android:name=".ContentProvider.MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +19,7 @@
         </activity>
 
         <provider
-            android:authorities="com.example.datastorage"
+            android:authorities="com.example.datastorage.ContentProvider.MyContentProvider"
             android:name=".ContentProvider.MyContentProvider"
             android:exported="true"
             android:grantUriPermissions="true"

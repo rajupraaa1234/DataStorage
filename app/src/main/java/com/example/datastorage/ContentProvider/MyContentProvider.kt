@@ -9,7 +9,7 @@ import android.net.Uri
 class MyContentProvider : ContentProvider() {
 
     companion object{
-        val PROVIDER_NAME = "com.example.datastorage.ContentProvider/MyContentProvider"
+        val PROVIDER_NAME = "com.example.datastorage.ContentProvider.MyContentProvider"
         val URL = "content://$PROVIDER_NAME/DETAIL_TABLE"
         val CONTENT_URI : Uri = Uri.parse(URL)
 
@@ -47,11 +47,15 @@ class MyContentProvider : ContentProvider() {
         return uri
     }
 
-    override fun delete(p0: Uri, p1: String?, p2: Array<out String>?): Int {
-        TODO("Not yet implemented")
+    override fun delete(uri: Uri, condition: String?, condition_val: Array<out String>?): Int {
+        var count : Int = db.delete("DETAIL_TABLE",condition,condition_val)
+        context?.contentResolver?.notifyChange(uri,null)
+        return count
     }
 
-    override fun update(p0: Uri, p1: ContentValues?, p2: String?, p3: Array<out String>?): Int {
-        TODO("Not yet implemented")
+    override fun update(uri: Uri, cv: ContentValues?, condition: String?, p3: Array<out String>?): Int {
+         var count : Int = db.update("DETAIL_TABLE",cv,condition,p3)
+         context?.contentResolver?.notifyChange(uri,null)
+         return count
     }
 }
