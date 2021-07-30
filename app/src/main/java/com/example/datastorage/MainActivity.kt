@@ -3,6 +3,7 @@ package com.example.datastorage
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -18,11 +19,14 @@ import com.example.datastorage.model.MyDataBase
 import com.example.datastorage.model.Student
 import com.example.myloginapp.Dialog.ExampleDialog
 import com.example.myloginapp.interfacePackage.OnClickListner
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleDialogListener{
 
     lateinit var txt : EditText
     lateinit var mydataBase : MyDataBase
+    var TAG = MainActivity::class.java.simpleName
     lateinit var studantTable : StudentViewModel
     lateinit var adapter: MyAdapter
     lateinit var recyclerView : RecyclerView
@@ -32,6 +36,31 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         init()
+        initFireBase()
+    }
+
+    private fun initFireBase() {
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+
+                // Get new FCM registration token
+                val token: String = task.getResult().toString()
+
+                // Log and toast
+                //val msg = getString(R.string.msg_token_fmt, token)
+                Log.d(TAG, token)
+                Toast.makeText(this, token, Toast.LENGTH_SHORT).show()
+            })
     }
 
     fun init(){
@@ -100,10 +129,10 @@ class MainActivity : AppCompatActivity(), OnClickListner, ExampleDialog.ExampleD
         checkForData()
     }
 
-    override fun onResume() {
+  /*  override fun onResume() {
         super.onResume()
         restoreData()
-    }
+    }*/
 
     private fun restoreData() {
         var sharPref = getSharedPreferences("mtap", MODE_PRIVATE)
