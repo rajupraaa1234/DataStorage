@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.datastorage">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DataStorage">
-        <activity android:name=".ContentProvider.ContentProviderActivity"></activity>
+        <activity android:name=".FireBaseServices.FireBaseStoreActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ContentProvider.ContentProviderActivity" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -20,11 +28,7 @@
             android:resource="@color/design_default_color_primary" />
 
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service
@@ -36,11 +40,10 @@
         </service>
 
         <provider
-            android:authorities="com.example.datastorage.ContentProvider.MyContentProvider"
             android:name=".ContentProvider.MyContentProvider"
+            android:authorities="com.example.datastorage.ContentProvider.MyContentProvider"
             android:exported="true"
-            android:grantUriPermissions="true"
-            ></provider>
+            android:grantUriPermissions="true" />
     </application>
 
 </manifest>
