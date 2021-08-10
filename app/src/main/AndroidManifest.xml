@@ -12,11 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DataStorage">
         <activity android:name=".FireBaseServices.FireBaseStoreActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".ContentProvider.ContentProviderActivity" />
 
@@ -28,7 +24,11 @@
             android:resource="@color/design_default_color_primary" />
 
         <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service

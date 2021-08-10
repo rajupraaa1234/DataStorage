@@ -15,7 +15,7 @@
         android:layout_marginEnd="10dp"
         android:layout_gravity="center"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:hint="Enter Name to add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
